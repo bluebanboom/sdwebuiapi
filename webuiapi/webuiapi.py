@@ -228,7 +228,7 @@ class WebUIApi:
     def txt2img(
         self,
         enable_hr=False,
-        denoising_strength=0.7,
+        denoising_strength=None,
         firstphase_width=0,
         firstphase_height=0,
         hr_scale=2,
@@ -287,7 +287,6 @@ class WebUIApi:
             "hr_second_pass_steps": hr_second_pass_steps,
             "hr_resize_x": hr_resize_x,
             "hr_resize_y": hr_resize_y,
-            "denoising_strength": denoising_strength,
             "firstphase_width": firstphase_width,
             "firstphase_height": firstphase_height,
             "prompt": prompt,
@@ -323,6 +322,9 @@ class WebUIApi:
             "save_images": save_images,
             "alwayson_scripts": alwayson_scripts,
         }
+
+        if denoising_strength is not None:
+            payload["denoising_strength"]= denoising_strength
 
         if use_deprecated_controlnet and controlnet_units and len(controlnet_units) > 0:
             payload["controlnet_units"] = [x.to_dict() for x in controlnet_units]
