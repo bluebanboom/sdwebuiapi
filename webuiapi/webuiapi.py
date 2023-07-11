@@ -5,7 +5,7 @@ import base64
 from PIL import Image
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Union
 
 
 class Upscaler(str, Enum):
@@ -52,8 +52,8 @@ class WebUIApiResult:
 class ControlNetUnit:
     def __init__(
         self,
-        input_image: Image = None,
-        mask: Image = None,
+        input_image: Union[Image.Image, str] = '',
+        mask: Union[Image.Image, str] = None,
         module: str = "none",
         model: str = "None",
         weight: float = 1.0,
@@ -92,8 +92,8 @@ class ControlNetUnit:
 
     def to_dict(self):
         return {
-            "input_image": raw_b64_img(self.input_image) if self.input_image else "",
-            "mask": raw_b64_img(self.mask) if self.mask is not None else None,
+            "input_image": raw_b64_img(self.input_image) if isinstance(self.input_image, Image.Image) else self.input_image,
+            "mask": raw_b64_img(self.mask) if isinstance(self.mask, Image.Image) else self.mask,
             "module": self.module,
             "model": self.model,
             "weight": self.weight,
